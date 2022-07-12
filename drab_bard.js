@@ -12,7 +12,6 @@
     function parseCrossword(data) {
         let title = "Untitled";
         let acrossWordList = [];
-        let downWordList = [];
         let rows = data.split('\n');
         let letters = [];
         let acrossHints = [];
@@ -23,7 +22,7 @@
 
             // ------------- TITLE --------------------------------------
             // default is 'Untitled'
-            if (row[0] === "*") {
+            if (row[0] === "*") { 
                 title = row.slice(
                     row.indexOf('*') + 1,
                     row.lastIndexOf('*'),
@@ -31,8 +30,8 @@
             }
             // ------------- Crossword Grid --------------------------------------
             if (row === 'across_clues:') break;
-            if (row.trim().length === 0) continue;
-            if (row[0] === "*") continue;
+            if (row.trim().length === 0) continue; // skip blank rows
+            if (row[0] === "*") continue; // skip title
 
             // array of letters for placing the cells
             letters = letters.concat(Array.from(row));
@@ -70,7 +69,6 @@
             'titleText': title,
             'answer_key': letters,
             'across_word_key': acrossWordList, 
-            // 'down_word_key': downWordList,
             'across_clues': acrossHints,
             'down_clues': downHints
         }
@@ -92,10 +90,8 @@
             let allInputs = document.querySelectorAll('input');
             allInputs.forEach(letters => (letters.setAttribute('highlight', 'None')));
         });
-        // array of down words
-        // downWordList = downWords(content.answer_key, rowLength);
 
-        // return content
+        return content
     }
 /* #endregion - read words and clues file*/
 
@@ -207,8 +203,7 @@
             }
 
             // suppress other keys
-            let acceptedChar = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o', 
-            'p','q','r','s','t','u','v','w','x','y','z', 'Backspace', 'Delete'];
+            let acceptedChar = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z', 'Backspace', 'Delete'];
             if (!acceptedChar.includes(e.key)) e.preventDefault();
 
         });
@@ -355,25 +350,6 @@
     }
 
 /* #endregion - Generate webpage */
-
-    // ------------- DOWN WORDS --------------------------------------
-    function downWords(answer_key, rowLength){
-        let columns = "";
-        for (let y = 0; y < rowLength; y++){
-        for (let x = y; x < answer_key.length; x += rowLength) {
-
-                if (x >= answer_key.length - rowLength){
-                    columns += answer_key[x] + "_" ;
-                }
-                else{
-                    columns += answer_key[x];
-                }     
-            }
-        }
-        downWordList = columns.replace(/([_])\1+/g, '$1').split("_");
-
-        return downWordList
-    }
 /* #region - direction */
     function changeDir(e){
         let dirState = document.querySelector('form').getAttribute('dirState');
@@ -430,6 +406,7 @@
 
         return activeInputLabel;
     }
+
     function markComplete(e){
         let activeInput = e.target;
 
@@ -519,9 +496,8 @@
             this.setAttribute('highlight_state', 'mouse_on_clue');
             highlightActiveWord(currentInput, clueDir, 'mouse_over');
         }
-        
- 
     }
+
     function clueMouseLeave(){
 
         let currentInput = getWordNum(this);
@@ -568,25 +544,10 @@
         wrongAnswers.forEach(letters => (letters.setAttribute('highlight', 'wrong')));
     }
 
-    // let inputQueue = [];
-    function handleInputValues(alphaChar){
-        // let inputQue = [];
-        
-        // inputQue.push(alphaChar);
-        let form = document.querySelector('form');
-        form.setAttribute('inputQue', [].push('a','b','c'))
-        //console.log(form.getAttribute('inputQue'));
-        // for (i in inputQue){
-        //      getNextInput('alphaChar'); 
-        // }
-        // , evaluateUserInput(e)
-    }
-
 /* #endregion - validation */
 /* #region - key navigation */
     function nav(e){ 
-        let alphaCharArr = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o', 
-            'p','q','r','s','t','u','v','w','x','y','z'];
+        let alphaCharArr = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
         
         if (alphaCharArr.includes(e.key))getNextInput('alphaChar'), evaluateUserInput(e); // letters
         else if (e.key === 'Tab') tabToNextWord(); // tab
@@ -704,8 +665,6 @@
                 increase = (!isBottomRow && nextCellPos > (totalCells - 1)) ? (row * rowLength) : (!isFirstRow && nextCellPos < 0) ? (totalCells - ((row + 1) * rowLength)) : null; 
 
                 newPos = (!isBottomRow && nextCellPos > (totalCells - 1)) ? (currentPos - increase) : (!isFirstRow && nextCellPos < 0) ? (currentPos + increase) : null;
-
-                // nextInput = document.querySelector(`input[input_pos="${newPos}"`);
             }
  
             // accounts for black cells in end row when moving vertically from the other end
