@@ -10,6 +10,7 @@
     const content = main(crosswordText);
 
     function parseCrossword(data) {
+        let title = "Untitled";
         let acrossWordList = [];
         let downWordList = [];
         let rows = data.split('\n');
@@ -20,8 +21,18 @@
         while (rows.length > 0) {
             let row = rows.shift().trim();
 
+            // ------------- TITLE --------------------------------------
+            // default is 'Untitled'
+            if (row[0] === "*") {
+                title = row.slice(
+                    row.indexOf('*') + 1,
+                    row.lastIndexOf('*'),
+                );
+            }
+            // ------------- Crossword Grid --------------------------------------
             if (row === 'across_clues:') break;
             if (row.trim().length === 0) continue;
+            if (row[0] === "*") continue;
 
             // array of letters for placing the cells
             letters = letters.concat(Array.from(row));
@@ -31,9 +42,6 @@
             let acrossWords = row.replace(/([_])\1+/g, '$1').split("_");
             // appends rows to array and filters for empty strings
             acrossWordList = acrossWordList.concat(acrossWords.filter(acrossWord => acrossWord != ""));
-
-
-
         }
 
         // ----------------- CLUES -------------------------------------------
@@ -55,15 +63,14 @@
 
             if (row.trim().length === 0) continue;
 
-
-            
             downHints.push(row)
         }
 
         return {
+            'titleText': title,
             'answer_key': letters,
             'across_word_key': acrossWordList, 
-            'down_word_key': downWordList,
+            // 'down_word_key': downWordList,
             'across_clues': acrossHints,
             'down_clues': downHints
         }
@@ -77,6 +84,7 @@
         addCells(content.answer_key, rowLength);
         addClues(content.across_clues, content.down_clues, rowLength);
         addHeading();
+        addTitle(content.titleText);
         // button event listener
         let button = document.querySelector('button');
         button.addEventListener('mousedown', validation); // sets highlights for answer validation
@@ -85,9 +93,9 @@
             allInputs.forEach(letters => (letters.setAttribute('highlight', 'None')));
         });
         // array of down words
-        downWordList = downWords(content.answer_key, rowLength);
+        // downWordList = downWords(content.answer_key, rowLength);
 
-        return content
+        // return content
     }
 /* #endregion - read words and clues file*/
 
@@ -110,7 +118,16 @@
         heading.textContent = "Toronto - On " + today;
 
         head.appendChild(heading);
+    }
 
+    function addTitle(titleText){
+
+        const title = document.createElement('h2');
+        const titleDiv = document.querySelector('.titleDiv');
+        title.textContent = titleText;
+        title.className = 'title';
+
+        titleDiv.appendChild(title);
     }
 
     function addCells(answer_key, rowLength) {
@@ -149,7 +166,7 @@
             var cell = cells[c];
             var prevCell = cell.previousSibling;
             var prevRow = cells[c - rowLength];
-
+            // cell gets a label if is in first row or after a black cell 
             if ((c < rowLength || c % rowLength === 0 || $(prevCell).hasClass('black')
                 || $(prevRow).hasClass('black')) && !$(cell).hasClass('black')) {
 

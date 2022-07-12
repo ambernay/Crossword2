@@ -207,7 +207,6 @@ p[highlight_state="clicked_clue"], [highlight_state="mouse_on_clue"]{
     color: black;
     font-weight:bold;
 }
-
 p[is_complete="strike_through"]{
 text-decoration: line-through;
 text-decoration-color:rgb(204, 204, 204); /* fallback color */
