@@ -17,7 +17,7 @@ html, body{
     /* equivalent background color : hsl(43, 10%, 84%); */
 body{
     background-color: #f9f7f1;
-    background-image: url("http://localhost:8000/textures/cardboard-flat.png");
+    background-image: url("textures/cardboard-flat.png");
 }
 button, .cross-grid{
     background-color: hsla(0, 0%, 0%, 80%);
@@ -64,9 +64,9 @@ h3{
 .title{
     grid-area: title;
     font-size: 20px;
-    text-align: start;
-    margin: 3.2vw 0 2vw 3.4vw;
-    align-self: center;
+    margin: 2vw 5vw;
+    /* text-align: start;
+    align-self: center; */
 }
 #acrossHeading{
     grid-area: acrossTitle;
@@ -136,10 +136,10 @@ button{
     display: grid;
     justify-content: space-evenly;
     align-content: space-evenly;
-    width: 38vw;
-    height: 38vw;
+    width: 35vw;
+    height: 35vw;
     margin: auto;
-    padding: 3px 7px 5px;
+    padding: 6px;
     z-index: 0;
 }
 
@@ -154,8 +154,8 @@ input{
     position: absolute;
     top: 0;
     left:0;
-    width: 2vw;
-    height: 2vw;
+    width: 1.8vw;
+    height: 1.9vw;
     font-size: 3vh;
     text-align: center;
     border: none;

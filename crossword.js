@@ -439,16 +439,17 @@
     }
 
     function inputMouseEnter(){
-
+        
         let dirState = document.querySelector('form').getAttribute('dirState');
         let currentInput = this.firstElementChild;
 
         if (currentInput.getAttribute('highlight') !== 'active_word'){
+            // highlight and return all inputs in word
             let activeInputLabel = highlightActiveWord(currentInput, dirState, 'mouse_over');
             let clue = document.querySelector(`p[clue_label = "${activeInputLabel}"`);
             clue.setAttribute('highlight_state', 'mouse_on_clue');
-            clue.scrollIntoViewIfNeeded({behaviour: 'smooth', block: 'center'});
-        }
+            clue.scrollIntoViewIfNeeded({behaviour: 'smooth', block: 'center'}); 
+        } 
     }
 
     function inputMouseLeave(){
@@ -572,6 +573,7 @@
         
         nextWord.select();
     }
+
     function getNextInput(keyValue){
 
         let dirState = document.querySelector('form').getAttribute('dirState');
