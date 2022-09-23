@@ -352,6 +352,7 @@
 /* #endregion - Generate webpage */
 /* #region - direction */
     function changeDir(e){
+        console.log('changed');
         let dirState = document.querySelector('form').getAttribute('dirState');
 
         if (dirState === 'horizontal'){
@@ -359,9 +360,34 @@
         }
         else if(dirState === 'vertical'){
             dirState = document.querySelector('form').setAttribute('dirState', 'horizontal');
-        }
+        } 
+        
+        cluesPosForMedia(dirState);  
         blurInput(e);
-        focusInput();
+        focusInput();   
+    }
+
+    function cluesPosForMedia(dirState){
+
+        if (dirState === 'horizontal'){
+            console.log(dirState);
+            // for media queries
+            acrossHeading = document.querySelector('#acrossHeading').setAttribute('is_active', 'active_clues');
+            downHeading = document.querySelector('#downHeading').setAttribute('is_active', 'not-active');
+            acrossClueList = document.querySelector('#across').setAttribute('is_cluelist_active', 'active');
+            downClueList = document.querySelector('#down').setAttribute('is_cluelist_active', 'not-active');
+            console.log(dirState);
+        }
+
+        else if (dirState === 'vertical'){
+            console.log(dirState);
+            // for media queries
+            acrossHeading = document.querySelector('#acrossHeading').setAttribute('is_active', 'not-active');
+            downHeading = document.querySelector('#downHeading').setAttribute('is_active', 'active_clues');
+            acrossClueList = document.querySelector('#across').setAttribute('is_cluelist_active', 'not-active');
+            downClueList = document.querySelector('#down').setAttribute('is_cluelist_active', 'active');
+            console.log(dirState);
+        }
     }
 
 /* #endregion - direction */
@@ -380,7 +406,7 @@
         clue.scrollIntoViewIfNeeded({behaviour: 'smooth', block: 'center'});
     }
 
-    function blurInput(e){
+    function blurInput(e){ // testing
         let activeClue = document.querySelector(`p[highlight_state = 'clicked_clue'`);
         let activeWord = document.querySelectorAll(`input[highlight = 'active_word'`);
 
@@ -643,7 +669,7 @@
 
 
     function selectNextInput(keyDir, nextInput, currentPos, increment, rowLength, totalCells,  isFirstRow, isBottomRow, skipBlackCells){
-
+        
         let increase = increment;
         
         while (nextInput === null && skipBlackCells){
